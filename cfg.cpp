@@ -34,7 +34,7 @@ B -> Cb | l
 C -> Ba | l
 
 Where the terminals a, b, and c expand into the substrings:
-a = “he said”,  b = “she said”,  c = “you lied”d
+a = ï¿½he saidï¿½,  b = ï¿½she saidï¿½,  c = ï¿½you liedï¿½d
 
 Example Series of Productions:
 w = A
@@ -56,8 +56,8 @@ Oct 2014
 */
 #include <iostream>
 #include <string.h>
-#include <time.h>
-#include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
 #pragma warning( disable : 4996)
 using namespace std;
 
@@ -207,7 +207,7 @@ int Cardinality(int row, int i)
 }
 // Prints the productions
 int print_production(production P) {
-	int i = 0, j=1;
+	int i = 0, j;
 	while (P[i][0][0]) {
 		cout << char(i + 'A') << " -> " << P[i][0];
 		j = 1;
@@ -252,75 +252,76 @@ Can process any CFG that can be put in these global tables.
 main() has been fixed and code added to iterate through the different
 grammars and to output the steps and final output neatly. 
 */
-void main(void)
+int main(void)
 {
-	// seed random number generator
-	srand((unsigned)time(0));
-	int row_num, pos_col, rand_col;
+    // seed random number generator
+    srand((unsigned)time(0));
+    int row_num, pos_col, rand_col;
 
-	// Main loop to loop through the 5 language generators
+    // Main loop to loop through the 5 language generators
 	for (int cfg_i = 0; cfg_i < 5; cfg_i++){
-		
-		//Print productions
-		cout << "Productions:" << endl;
-		print_production(P[cfg_i]);
 
-		//Print Terminals
-		cout << "Where the terminals ";
-		int t = 0;
-		while (tTable[cfg_i][t][0]) {
-			if (tTable[cfg_i][t][0] != '~' && tTable[cfg_i][t][0] != '1')
-				cout << char(t + 'a')  << ", ";
-			t++;
-		}
-		//Print the substrings
-		cout << "expand to the substrings: " << endl;
-		t = 0;
-		while (tTable[cfg_i][t][0]) {
-			if (tTable[cfg_i][t][0] != '~' && tTable[cfg_i][t][0] != '1')
-				cout << char(t + 'a') << " = \"" << tTable[cfg_i][t] << "\", ";
-			t++;
-		}
-		//Print 3 of each random productions
-		cout << endl << endl;
-		for (int i = 0; i < 3; i++){
-			strcpy(w,"A");
-			strcpy(buf,"");
-			cout << "Random Production:" << endl;
-			cout << "w = " << w << endl;  // print status
+        //Print productions
+            cout << "Productions:" << endl;
+        print_production(P[cfg_i]);
 
-			// Process all of w repeatedly until all nonterminals are gone
-			while (gotNs())
-			{
-				// Scan w and replace nonterminals with random productions
-				int i = 0; int j = 0; buf[0] = 0;
-				while (w[i])  // for each w[i] in w
-				{
-					// Nonterminals
-					if (w[i] >= 'A' && w[i] <= 'Z')
-					{
-						row_num = w[i] - 'A';	// calculate row index into Productions table
-						pos_col = Cardinality(row_num, cfg_i);  // get cardinality of this row of productions
-						rand_col = rand() % pos_col;  // generate a random column index for this row of productions
-						cout << "  " << w[i] << " -> " << P[cfg_i][row_num][rand_col];
-						strcat(buf, P[cfg_i][row_num][rand_col]);  // copy production to buf
-					}
-					// Terminals
-					else{                               // else w[i] is a terminal
-						char lilbuf[10] = { w[i], 0 };  // put this terminal into a lil buffer
-						strcat(buf, lilbuf);            // copy terminal to buf
-					}
-					i++;                                // next char in w
-				}
-				// copy back to w
-				strcpy(w, buf);
-				cout << endl << "w = " << w << endl;    // print status
-			}
+        //Print Terminals
+        cout << "Where the terminals ";
+        int t = 0;
+        while (tTable[cfg_i][t][0]) {
+            if (tTable[cfg_i][t][0] != '~' && tTable[cfg_i][t][0] != '1')
+                cout << char(t + 'a')  << ", ";
+            t++;
+        }
+        //Print the substrings
+        cout << "expand to the substrings: " << endl;
+        t = 0;
+        while (tTable[cfg_i][t][0]) {
+            if (tTable[cfg_i][t][0] != '~' && tTable[cfg_i][t][0] != '1')
+                cout << char(t + 'a') << " = \"" << tTable[cfg_i][t] << "\", ";
+            t++;
+        }
+        //Print 3 of each random productions
+        cout << endl << endl;
+            for (int i = 0; i < 3; i++){
+                strcpy(w,"A");
+                strcpy(buf,"");
+                cout << "Random Production:" << endl;
+                cout << "w = " << w << endl;  // print status
 
-			expand(cfg_i);
-			cout << "w = " << w << endl << endl;		// Print the string
-		}
-		cout << endl;
-	}
-	getchar();
+                // Process all of w repeatedly until all nonterminals are gone
+                while (gotNs())
+                {
+                    // Scan w and replace nonterminals with random productions
+                    i = 0; buf[0] = 0;
+                    while (w[i])  // for each w[i] in w
+                    {
+                        // Nonterminals
+                        if (w[i] >= 'A' && w[i] <= 'Z')
+                        {
+                            row_num = w[i] - 'A';	// calculate row index into Productions table
+                            pos_col = Cardinality(row_num, cfg_i);  // get cardinality of this row of productions
+                            rand_col = rand() % pos_col;  // generate a random column index for this row of productions
+                            cout << "  " << w[i] << " -> " << P[cfg_i][row_num][rand_col];
+                            strcat(buf, P[cfg_i][row_num][rand_col]);  // copy production to buf
+                        }
+						// Terminals
+                        else{                               // else w[i] is a terminal
+                            char lilbuf[10] = { w[i], 0 };  // put this terminal into a lil buffer
+                            strcat(buf, lilbuf);            // copy terminal to buf
+                        }
+                        i++;                                // next char in w
+                    }
+                    // copy back to w
+                    strcpy(w, buf);
+                    cout << endl << "w = " << w << endl;    // print status
+                }
+
+                expand(cfg_i);
+                cout << "w = " << w << endl << endl;		// Print the string
+            }
+        cout << endl;
+    }
+    getchar();
+    return 0;
 }
