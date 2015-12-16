@@ -34,7 +34,7 @@ B -> Cb | l
 C -> Ba | l
 
 Where the terminals a, b, and c expand into the substrings:
-a = �he said�,  b = �she said�,  c = �you lied�d
+a = he said,  b = she said,  c = you lied
 
 Example Series of Productions:
 w = A
@@ -75,7 +75,8 @@ production P[5] = { {
    "Ba", "~", "",  "", "",          // C -> Ba
    0, 0, 0,  0, 0,                  // null
 },
-{// Productions 2
+
+{  // Productions 2
    "aBCoDF", "", "", "", "",        // A ->
    "Bb", "Bc", "Bd", "~", "",       // B ->
    "e", "f", "g",  "", "",          // C ->
@@ -84,7 +85,8 @@ production P[5] = { {
    "k", "m", "n",  "", "",          // F ->
    0, 0, 0,  0, 0,                  // null
 },
-{// Productions 3
+
+{  // Productions 3
    "aBCDE", "", "", "", "",         // A ->
    "bc", "bd", "cb", "cd", "",      // B ->
    "e", "f", "g",  "", "",          // C ->
@@ -92,7 +94,8 @@ production P[5] = { {
    "k", "m", "~",  "", "",          // E ->
    0, 0, 0,  0, 0,                  // null
 },
-{// Productions 4
+
+{  // Productions 4
    "Bmbnaomap", "", "", "", "",     // A ->
    "Cmcnb", "~", "", "", "",        // B ->
    "Dmdnc", "~", "",  "", "",       // C ->
@@ -101,7 +104,7 @@ production P[5] = { {
    "mgnf", "~", "",  "", "",        // F ->
    0, 0, 0,  0, 0,                  // null
 }, 
-{// Rick Elwoods custom Grammar (production 5)
+{  // Rick Elwoods custom Grammar (production 5)
    "aBBCDEtFG", "aBCDEtFG", "aBBBGtFCDE", "",    "",    // A ->
    "b", "c", "d", "e", "",                              // B ->
    "g", "h", "i",  "j", "",                             // C ->
@@ -117,7 +120,8 @@ terminal tTable[5] = { {
    "he said ",              //a
    "she said ",             //b
    "you lie.", 0},          //c
-{ //Terminal Expansion 2
+
+{  //Terminal Expansion 2
    "My ",                   //a
    "brothers ",             //b
    "uncle's ",              //c
@@ -133,7 +137,7 @@ terminal tTable[5] = { {
    "noodle head ",          //m
    "astronaut ",            //n
    "is a ", 0},             //o
-{ //Terminal Expansion 3
+{  //Terminal Expansion 3
    "the ",                  //a
    "brown ",                //b
    "lazy ",                 //c
@@ -147,7 +151,8 @@ terminal tTable[5] = { {
    "high ",                 //k
    "~",                     //l
    "fast ", 0},             //m
-{ //Terminal Expansion 4
+
+{  //Terminal Expansion 4
    "fly ",                  //a
    "spider ",               //b
    "mouse ",                //c
@@ -165,7 +170,8 @@ terminal tTable[5] = { {
    "I don't know why ",     //o
    "perhaps she'll die ",   //p
    0, },
-   { //Terminal Expansion 5 (Rick Elwood's custom grammar)
+
+{  //Terminal Expansion 5 (Rick Elwood's custom grammar)
    "My ",                   //a
    "friend's ",             //b
    "brother's ",            //c
@@ -194,6 +200,7 @@ terminal tTable[5] = { {
    "minivan ",              //z
    0, }
 };
+
 // Gets the cardinality for a row of the Productions table
 int Cardinality(int row, int i)
 {
@@ -205,6 +212,7 @@ int Cardinality(int row, int i)
 
    return col;
 }
+
 // Prints the productions
 int print_production(production P) {
    int i = 0, j;
@@ -221,6 +229,7 @@ int print_production(production P) {
    cout << endl;
    return 0;
 }
+
 // Returns true if there are Nonterminals in w
 bool gotNs()
 {
@@ -229,6 +238,7 @@ bool gotNs()
          return true;
    return false;
 }
+
 /*
 Introduces verbosity
 Replaces terminals with big strings for humans to read and ponder
@@ -245,6 +255,7 @@ void expand(int cfg_i)
    }
    strcpy(w, buf);  // copy back to w
 }
+
 /*
 Implements an iterative CFG processor driven by global tables.
 Can process any CFG that can be put in these global tables.
@@ -262,7 +273,7 @@ int main(void)
    for (int cfg_i = 0; cfg_i < 5; cfg_i++){
 
         // Print productions
-            cout << "Productions:" << endl;
+       cout << "Productions:" << endl;
         print_production(P[cfg_i]);
 
         // Print Terminals
@@ -273,6 +284,7 @@ int main(void)
                 cout << char(t + 'a')  << ", ";
             t++;
         }
+
         // Print the substrings
         cout << "expand to the substrings: " << endl;
         t = 0;
@@ -281,6 +293,7 @@ int main(void)
                 cout << char(t + 'a') << " = \"" << tTable[cfg_i][t] << "\", ";
             t++;
         }
+
         // Print 3 of each random productions
         cout << endl << endl;
             for (int i = 0; i < 3; i++){
@@ -303,8 +316,9 @@ int main(void)
                             pos_col = Cardinality(row_num, cfg_i);  // get cardinality of this row of productions
                             rand_col = rand() % pos_col;     // generate a random column index for this row of productions
                             cout << "  " << w[i] << " -> " << P[cfg_i][row_num][rand_col];
-                            strcat(buf, P[cfg_i][row_num][rand_col]);   // copy production to buf
+                            strcat(buf, P[cfg_i][row_num][rand_col]);   // copy production to buffer
                         }
+
                         // Terminals
                         else{                               // else w[i] is a terminal
                             char lilbuf[10] = { w[i], 0 };  // put this terminal into a lil buffer
